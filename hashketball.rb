@@ -202,5 +202,93 @@ def player_numbers(team_name)
 end
 
 
+def player_stats(players_name)
+  hash = {}
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+            if name == players_name
+              hash = details
+            end 
+          end
+        end
+      end
+    end 
+  end
+  hash
+end
 
+
+def big_shoe_rebounds
+  shoe_sizes = {}
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+              shoe_sizes[name] = details[:shoe]
+          end
+        end
+      end
+    end 
+  end
+  shoe_sizes
+  largest = shoe_sizes.key(shoe_sizes.values.max)
+  num = 0
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+            if name == largest
+              num = details[:rebounds]
+            end
+          end 
+        end 
+      end 
+    end 
+  end 
+  num
+end
+
+
+def most_points_scored 
+  most = {}
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+              most[name] = details[:points]
+          end
+        end
+      end
+    end 
+  end
+  most
+  player_w_most = most.key(most.values.max)
+end
+
+
+def winning_team
+  scores = {}
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+            #scores[name] = details[:points]
+          
+          
+          end
+        end
+      end
+    end 
+  end
+  #binding.pry
+  scores
+  
+end
 

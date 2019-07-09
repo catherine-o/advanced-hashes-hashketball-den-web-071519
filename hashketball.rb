@@ -274,21 +274,84 @@ end
 
 def winning_team
   scores = {}
+  team_points_1 = []
+  team_points_2 = []
+  
   game_hash.each do |location, team_data|
     team_data.each do |attribute, data|
       if attribute == :players
         data.each do |player_info|
           player_info.each do |name, details|
-            #scores[name] = details[:points]
-          
-          
+            if team_points_1.length < 5
+              team_points_1 << details[:points]
+            else
+              team_points_2 << details[:points]
+            end 
           end
         end
       end
-    end 
+    end
+  end 
+  game_hash.each do |location, team_data|
+    team = team_data[:team_name]
+      if !scores.include?(team)
+        scores[team] = team_points_1.sum
+      else 
+        scores[team] = team_points_2.sum
+      end
   end
-  #binding.pry
   scores
-  
+  winners = scores.key(scores.values.max)
 end
 
+
+def player_with_longest_name
+  names = []
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+            names << name 
+          end 
+        end 
+      end 
+    end 
+  end
+  names
+  names_by_length = names.max_by { |each_name| each_name.length }
+end
+
+
+def long_name_steals_a_ton?
+  steals = []
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+            steals << details[:steals] 
+          end 
+        end 
+      end 
+    end 
+  end
+  steals
+  most_steals = steals.max   #(most_steals = 22)
+  
+  player_with_longest_name_steals = 0
+  game_hash.each do |location, team_data|
+    team_data.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_info|
+          player_info.each do |name, details|
+            if name == player_with_longest_name
+              player_with_longest_name_steals = details[:steals]
+            end 
+          end 
+        end 
+      end 
+    end 
+  end 
+  player_with_longest_name_steals == most_steals
+end

@@ -296,11 +296,13 @@ def winning_team
     team = team_data[:team_name]
       if !scores.include?(team)
         scores[team] = team_points_1.sum
+       # binding.pry
       else 
         scores[team] = team_points_2.sum
       end
   end
   scores
+  
   winners = scores.key(scores.values.max)
 end
 
